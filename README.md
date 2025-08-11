@@ -1,2 +1,12 @@
 # BSAUEA
-BSAUEA
+
+> The unsupervised loss value needs to be computed on the CPU to avoid memory overflow.
+> The calculation of the temporal similarity matrix also needs to use the CPU.
+> When running yogo-wiki50k, if the GPU memory is insufficient, you can try switching to CPU execution.
+
+The heterogeneous dataset comes from: https://github.com/DataArcTech/Simple-HHEA
+
+download glove.6B.zip from https://nlp.stanford.edu/projects/glove/
+unzip glove.6B.zip into data/ (glove.6B.300d.txt will be used)
+
+
