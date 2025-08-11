@@ -61,7 +61,6 @@ def test_all(x1, x2, data, unspervised=False):
     test(x1, x2, data.eval_set,data.eval_time, 'Eval')
     test(x1, x2, data.test_set,data.test_time, 'Test')
     
-data = Data(args.data, args.embs, args.rate, args.seed, args.device)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -78,37 +77,12 @@ if __name__ == '__main__':
     parser.add_argument("--unspervised", default=False)
     args = parser.parse_args()
 
-    # 原有代码
     setup_seed(args.seed)
     data = Data(args.data, args.embs, args.rate, args.seed, args.device)
-
-    #  插入此段（结构相似判断+BERT编码）
-    from bert_encoder import BERTNameEncoder
-    from structure_gate import should_enable_gcn
-
-    # 加载实体名称（你也可以调用 data.path 来拼接完整路径）
-    name_path_1 = os.path.join(args.data, 'ent_names_1')
-    name_path_2 = os.path.join(args.data, 'ent_names_2')
-    names_1 = [line.strip().split('\t')[1] if '\t' in line else '' for line in open(name_path_1, encoding='utf-8')]
-    names_2 = [line.strip().split('\t')[1] if '\t' in line else '' for line in open(name_path_2, encoding='utf-8')]
-
-    bert_encoder = BERTNameEncoder().to(args.device)
-    with torch.no_grad():
-        x1_bert = bert_encoder(names_1).to(args.device)
-        x2_bert = bert_encoder(names_2).to(args.device)
-
-    # 判断结构相似度是否超过阈值，决定是否使用GCN
-    struct_sim = 0.81  # TODO: 动态读取或配置
-    if should_enable_gcn(struct_sim):
-        print(" GCN is enabled.")
-        data.x1 = model.gcn1(x1_bert, data.edge1)
-        data.x2 = model.gcn2(x2_bert, data.edge2)
-    else:
-        print(" GCN is skipped.")
-        data.x1 = x1_bert
-        data.x2 = x2_bert
-
-    #  时间矩阵生成
+    each_num=data.each_num
+    m_filename="m_"+args.data.split("/")[1]+"_"+str(each_num)+".pkl"
+    print(m_filename)
+#  时间矩阵生成
 #     train_pair,dev_pair,all_pair,adj_matrix,adj_features,rel_features,time_dict = load_data(args.data+"/")
 #     print('读取完毕')
 #     rest_set_1 = [e1 for e1, e2 in dev_pair]

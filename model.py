@@ -70,7 +70,6 @@ class GCN(nn.Module):
         output = torch.cat(output, dim=1)
         output = F.normalize(output, dim=1, p=2)
         return output
-    
 
 
 class ELTEA(nn.Module):
