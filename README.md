@@ -1,33 +1,57 @@
-> The unsupervised loss value needs to be computed on the CPU to avoid memory overflow.
-> The calculation of the temporal similarity matrix also needs to use the CPU.
-> When running yogo-wiki50k, if the GPU memory is insufficient, you can try switching to CPU execution.
+# BSAUEA Project
 
-The heterogeneous dataset comes from: https://github.com/DataArcTech/Simple-HHEA
+## Important Notes
 
-download glove.6B.zip from https://nlp.stanford.edu/projects/glove/
-unzip glove.6B.zip into data/ (glove.6B.300d.txt will be used)
+> **Memory Management:**
+> - Unsupervised loss computation must be performed on CPU to prevent memory overflow
+> - Temporal similarity matrix calculation requires CPU execution
+> - For YAGO-WIKI50K dataset, switch to CPU mode if GPU memory is insufficient
 
-ENVIRONMENT
-  Requirements
-  Ubuntu18.04,
-  Python 3.8, 
-  CUDA 11.3, 
-  cuDNN 8, 
-  NVCC, 
-  Pytorch 1.11.0, 
-  torchvision 0.12.0, 
-  torchaudio 0.11.0
+## Dataset Preparation
 
+### Heterogeneous Datasets
+Download heterogeneous datasets from:  
+[https://github.com/DataArcTech/Simple-HHEA](https://github.com/DataArcTech/Simple-HHEA)
 
+### GloVe Embeddings
+1. Download `glove.6B.zip` from:  
+   [https://nlp.stanford.edu/projects/glove/](https://nlp.stanford.edu/projects/glove/)
+2. Unzip into `data/` directory
+3. File `glove.6B.300d.txt` will be used for training
 
-DATASETS
-   ent_ids_1: Represents the entity IDs of the source knowledge graph.
-   ent_ids_2: Represents the entity IDs of the target knowledge graph.
-   triples_1: The relation quadruples (or temporal quadruples) encoded by IDs in the source knowledge graph.
-   triples_2: The relation quadruples (or temporal quadruples) encoded by IDs in the target knowledge graph.
-   rel_ids_1: Represents the relation IDs of the source knowledge graph.
-   rel_ids_2: Represents the relation IDs of the target knowledge graph.
-   sup_pairs + ref_pairs: The aligned entity pairs.
-   ref_ent_ids: sup_pairs + ref_pairs.
-   Note: Regarding the YAGO-WIKI50K and WIKI50K datasets, while the data format is based on Wikipedia + QID, we actually use the version with Wikipedia + entity names (i.e., the entity name version).
+## Environment Requirements
 
+**System Configuration:**
+- **OS:** Ubuntu 18.04
+- **Python:** 3.8
+- **CUDA:** 11.3
+- **cuDNN:** 8
+- **NVCC:** Required
+
+**Python Packages:**
+- `torch == 1.11.0`
+- `torchvision == 0.12.0`
+- `torchaudio == 0.11.0`
+
+## Dataset Format Specification
+
+**File Structure:**
+- `ent_ids_1`: Entity IDs of source knowledge graph
+- `ent_ids_2`: Entity IDs of target knowledge graph  
+- `triples_1`: Relation quadruples (ID-encoded) in source KG
+- `triples_2`: Relation quadruples (ID-encoded) in target KG
+- `rel_ids_1`: Relation IDs of source knowledge graph
+- `rel_ids_2`: Relation IDs of target knowledge graph
+- `sup_pairs + ref_pairs`: Aligned entity pairs
+- `ref_ent_ids`: Combined `sup_pairs + ref_pairs`
+
+**Special Note for YAGO-WIKI50K/WIKI50K:**  
+While the original format uses Wikipedia + QID identifiers, this implementation utilizes the **entity name version** (Wikipedia + entity names).
+
+## Acknowledgements
+
+This project references code from:
+- **RAGA**
+- **Simple-HHEA**
+
+We extend our gratitude to the authors for their valuable contributions to the research community.
